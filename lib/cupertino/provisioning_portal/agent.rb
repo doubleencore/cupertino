@@ -110,6 +110,9 @@ module Cupertino
       def list_devices
         get('https://developer.apple.com/account/ios/device/deviceList.action')
 
+        additional_devices_string = /You can register [0-9]{1,} additional devices./.match(page.body)
+        number_of_devices = /[0-9]{1,}/.match(additional_devices_string[0])
+
         regex = /deviceDataURL = "([^"]*)"/
         device_data_url = (page.body.match regex or raise UnexpectedContentError)[1]
 
