@@ -111,7 +111,7 @@ module Cupertino
         get('https://developer.apple.com/account/ios/device/deviceList.action')
 
         additional_devices_string = /You can register [0-9]{1,} additional devices./.match(page.body)
-        number_of_devices = /[0-9]{1,}/.match(additional_devices_string[0])
+        number_of_additional_devices = /[0-9]{1,}/.match(additional_devices_string[0])
 
         regex = /deviceDataURL = "([^"]*)"/
         device_data_url = (page.body.match regex or raise UnexpectedContentError)[1]
@@ -131,7 +131,7 @@ module Cupertino
           devices << device
         end
 
-        devices
+        [devices, number_of_additional_devices]
       end
 
       def add_devices(*devices)
@@ -250,7 +250,7 @@ module Cupertino
       def manage_devices_for_profile(profile)
         raise ArgumentError unless block_given?
 
-        devices = list_devices
+        devices = list_devices[0]
 
         begin
           get(profile.edit_url)

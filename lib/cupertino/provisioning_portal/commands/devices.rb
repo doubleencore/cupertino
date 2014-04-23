@@ -4,11 +4,13 @@ command :'devices:list' do |c|
   c.description = ''
 
   c.action do |args, options|
-    devices = try{agent.list_devices}
+    
+    device_data = try{agent.list_devices}
+    devices = device_data[0]
 
     number_of_devices = devices.compact.length
     number_of_additional_devices = devices.length - number_of_devices
-
+    puts device_data[1]
     title = "Listing #{pluralize(number_of_devices, 'device')} "
     title += "(You can register #{pluralize(number_of_additional_devices, 'additional device')})" if number_of_additional_devices > 0
 
