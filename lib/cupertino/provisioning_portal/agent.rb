@@ -239,8 +239,6 @@ module Cupertino
       end
 
       def download_profile(profile)
-        list_profiles(profile.type)
-
         self.pluggable_parser.default = Mechanize::Download
         download = get(profile.download_url)
         download.save
@@ -326,9 +324,10 @@ module Cupertino
       private
 
       def login!
-        if form = page.form_with(:name => 'appleConnectForm')
-          form.theAccountName = self.username
-          form.theAccountPW = self.password
+        if form = page.forms.first
+          form.fields_with(type: 'text').first.value = self.username
+          form.fields_with(type: 'password').first.value = self.password
+
           form.submit
         end
       end
