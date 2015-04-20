@@ -71,6 +71,7 @@ module Cupertino
 
         regex = /certificateDataURL = "([^"]*)"/
         certificate_data_url = (page.body.match regex or raise UnexpectedContentError)[1]
+        certificate_data_url += "&pageSize=50&pageNumber=1&sort=name=asc"
 
         regex = /certificateRequestTypes = "([^"]*)"/
         certificate_request_types = (page.body.match regex or raise UnexpectedContentError)[1]
@@ -115,6 +116,7 @@ module Cupertino
 
         regex = /deviceDataURL = "([^"]*)"/
         device_data_url = (page.body.match regex or raise UnexpectedContentError)[1]
+        device_data_url += "&pageSize=500&pageNumber=1&sort=name=asc"
 
         post(device_data_url)
 
@@ -218,6 +220,8 @@ module Cupertino
                               '&type=production'
                             end
 
+	profile_data_url += "&pageSize=500&pageNumber=1&sort=name=asc"
+	
         post(profile_data_url)
         @profile_csrf_headers = {
           'csrf' => page.response['csrf'],
@@ -294,6 +298,7 @@ module Cupertino
 
         regex = /bundleDataURL = "([^"]*)"/
         bundle_data_url = (page.body.match regex or raise UnexpectedContentError)[1]
+        bundle_data_url += "&pageSize=50&pageNumber=1&sort=name=asc"
 
         post(bundle_data_url)
         bundle_data = page.content
